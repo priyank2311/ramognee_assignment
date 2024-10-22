@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SignupForm from './components/SignupForm';
+import LoginForm from './components/LoginForm';
+import ProductList from './components/ProductList';
+import Cart from './components/Cart';
 
 function App() {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]);
+  };
+
+  const removeFromCart = (index) => {
+    setCart((prevCart) => prevCart.filter((_, i) => i !== index));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="flex items-center justify-center">
+        <Routes>
+          <Route path="/" element={<SignupForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route
+            path="/products"
+            element={<ProductList addToCart={addToCart} cart={cart} />} /> 
+          <Route
+            path="/cart"
+            element={<Cart cart={cart} removeFromCart={removeFromCart} addToCart={addToCart} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
